@@ -1,7 +1,13 @@
 import * as actionTypes from '../actions/actionTypes';
+import updateObject from '../utility';
 
 const initialState = {
     results: []
+}
+
+const deleteResult = (state, action) => {
+    const updatedArray = state.results.filter( result => result.id !== action.resultElId)
+    return updateObject(state, {results: updatedArray});
 }
 
 const reducer = (state = initialState, action) => {
@@ -9,17 +15,10 @@ const reducer = (state = initialState, action) => {
         case actionTypes.STORE_RESULT :
             return {
                 ...state,
-                results: state.results.concat({id: new Date(), value: action.result})   // nie używać push! push zmienia orginalną wartość, contact zwraca nową tablicę - stara + argument;  action i result zwracają nowy stan
-                 
+                results: state.results.concat({id: new Date(), value: action.result})   // nie używać push! push zmienia orginalną wartość, contact zwraca nową tablicę - stara + argument;  action i result zwracają nowy stan      
             }
         case actionTypes.DELETE_RESULT :
-             const updatedArray = state.results.filter( result => result.id !== action.resultElId)
-            return {
-                ...state,
-                results: updatedArray
-
-            }  
-    }
+            return deleteResult(state, action)};
     return state;
 };
 
